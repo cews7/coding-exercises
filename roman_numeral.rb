@@ -1,4 +1,3 @@
-require 'pry'
 class NumeralConverter
   def initialize
     @roman_dictionary = {
