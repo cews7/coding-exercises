@@ -2,7 +2,7 @@ require 'pry'
 class Check
   attr_reader :sudoku
   attr_accessor :valid
-  
+
   def initialize(sudoku)
     @sudoku = sudoku
     @valid  = true
@@ -13,14 +13,24 @@ class Check
     if @valid
       check_columns
     else
-       print 'false'
+      print 'false'
     end
+    if @valid
+      check_sub_boxes
+    else
+      print 'false'
+    end
+  end
+
+  def check_sub_boxes
+    binding.pry
   end
 
   def check_columns
     column_number = 0
-    number_in_column = 0
+    number_in_column = -1
     numbers_checked = 0
+    column_collector = []
     until numbers_checked == 81
       if column_collector.include?(@sudoku[column_number][number_in_column]) && @sudoku[column_number][number_in_column] != "."
         @valid = false
@@ -30,7 +40,9 @@ class Check
       end
       column_number += 1
       if column_number == 8
+        column_collector = []
         column_number = 0
+        number_in_column += 1
       end
       numbers_checked += 1
     end
