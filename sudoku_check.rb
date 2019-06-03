@@ -10,16 +10,9 @@ class Check
 
   def sudoku_steps
     check_rows
-    if @valid
-      check_columns
-    else
-      print 'false'
-    end
-    if @valid
-      check_sub_boxes
-    else
-      print 'false'
-    end
+    check_columns
+    check_sub_boxes
+    # print @valid.to_s
   end
 
   def check_sub_boxes
