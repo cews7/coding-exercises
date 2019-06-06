@@ -14,6 +14,38 @@ class Check
     print @valid.to_s
   end
 
+  def check_rows
+    @sudoku.map do |row|
+      row_collector = []
+      row.map do |num|
+        if row_collector.include?(num) && num != "."
+          @valid = false
+          break
+        else
+          row_collector << num
+        end
+      end
+      break if !@valid
+    end
+  end
+
+  def check_columns
+    column_number = 0
+    number_in_column = -1
+    numbers_checked = 0
+    column_collector = []
+    until numbers_checked == 81
+      validate_columns(column_collector, column_number, number_in_column)
+      column_number += 1
+      if column_number == 8
+        column_collector = []
+        column_number = 0
+        number_in_column += 1
+      end
+      numbers_checked += 1
+    end
+  end
+
   def generate_sub_boxes
     one, two, three, four, five, six, seven, eight, nine = [],[],[],[],[],[],[],[],[]
      @sudoku.map.with_index do |row, curr_row_i|
@@ -33,48 +65,21 @@ class Check
     validate_sub_boxes(boxes)
   end
 
+  private
+
+  def validate_columns(column_collector, column_number, number_in_column)
+    if column_collector.include?(@sudoku[column_number][number_in_column]) &&
+      @sudoku[column_number][number_in_column] != "."
+      @valid = false
+    else
+      column_collector << @sudoku[column_number][number_in_column]
+    end
+  end
+
   def validate_sub_boxes(boxes)
     boxes.map do |box|
       box.delete(".")
       @valid = false if box.length > box.uniq.length
-    end
-  end
-
-  def check_columns
-    column_number = 0
-    number_in_column = -1
-    numbers_checked = 0
-    column_collector = []
-    until numbers_checked == 81
-      if column_collector.include?(@sudoku[column_number][number_in_column]) &&
-        @sudoku[column_number][number_in_column] != "."
-        @valid = false
-        break
-      else
-        column_collector << @sudoku[column_number][number_in_column]
-      end
-      column_number += 1
-      if column_number == 8
-        column_collector = []
-        column_number = 0
-        number_in_column += 1
-      end
-      numbers_checked += 1
-    end
-  end
-
-  def check_rows
-    @sudoku.map do |row|
-      row_collector = []
-      row.map do |num|
-        if row_collector.include?(num) && num != "."
-          @valid = false
-          break
-        else
-          row_collector << num
-        end
-      end
-      break if !valid
     end
   end
 end
