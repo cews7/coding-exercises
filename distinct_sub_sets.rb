@@ -1,21 +1,18 @@
 require 'pry'
 class Distinct
-  attr_accessor :sub_set_list
-
-  def initialize
-    @sub_set_list = []
-  end
-
-  def sub_set(input)
-    #have i seen this combo of numbers before, no? put it in the new array
-    
-    sub_set_list << [sub_num] if !sub_set_list.include?([sub_num])
-    p sub_set_list
+  def self.sub_set(input)
+    if input == []
+      input
+    else
+      input.map do |num|
+        [num] + sub_set(input[1...-1])
+      end
+    end
   end
 end
 
 nums = [1,2,3]
-Distinct.new.sub_set(nums)
+print Distinct.sub_set(nums)
 # [
 #   [3],
 #   [1],
